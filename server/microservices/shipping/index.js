@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 
 const app = express();
-const PORT = 8092;
+const PORT = 8091;
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());
