@@ -84,7 +84,9 @@ export const editUser = asyncHandler(async (req, res, next) => {
 
   await userDBPool.query(updateQuery, updateParams);
 
-  const token = jwt.sign({ _id: user.id }, process.env.SECRET_KEY);
+  const token = jwt.sign({ _id: user.id }, process.env.SECRET_KEY, {
+    expiresIn: "1d",
+  });
 
   res
     .status(200)

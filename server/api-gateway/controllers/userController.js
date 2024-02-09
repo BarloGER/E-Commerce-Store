@@ -33,7 +33,9 @@ export const signIn = asyncHandler(async (req, res, next) => {
     "UPDATE users SET last_login = NOW() WHERE user_id = $1";
   await userDBPool.query(loginUpdateQuery, [user.user_id]);
 
-  const token = jwt.sign({ id: user.user_id }, process.env.SECRET_KEY);
+  const token = jwt.sign({ id: user.user_id }, process.env.SECRET_KEY, {
+    expiresIn: "1d",
+  });
   res.status(200).json({ token, message: "Erfolgreich angemeldet." });
 });
 
@@ -81,7 +83,8 @@ export const signUp = asyncHandler(async (req, res, next) => {
 
   const token = jwt.sign(
     { id: newUser.rows[0].user_id },
-    process.env.SECRET_KEY
+    process.env.SECRET_KEY,
+    { expiresIn: "1d" }
   );
   res.status(201).json({ token, message: "Erfolgreich registriert." });
 });
