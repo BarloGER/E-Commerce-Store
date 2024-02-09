@@ -2,14 +2,13 @@ import axios from "axios";
 
 export const proxy = (target) => {
   return async (req, res) => {
-    const url = `${target}${req.url}`;
-    console.log(`Weiterleitung an: ${url}`);
+    const { host, "cache-control": _, ...restOfHeaders } = req.headers;
 
     const axiosConfig = {
       method: req.method,
-      url: url,
+      url: `${target}${req.url}`,
       data: req.body,
-      headers: { ...req.headers, "Cache-Control": "no-cache" },
+      headers: { ...restOfHeaders, "Cache-Control": "no-cache" },
     };
 
     try {
