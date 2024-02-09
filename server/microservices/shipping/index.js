@@ -6,7 +6,7 @@ const PORT = 8091;
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Shipping Service: GET-Anfrage empfangen");

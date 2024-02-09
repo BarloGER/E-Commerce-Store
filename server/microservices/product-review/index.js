@@ -6,7 +6,7 @@ const PORT = 8087;
 
 app.use(cors({ origin: "*" }));
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Product Review Service: GET-Anfrage empfangen");
