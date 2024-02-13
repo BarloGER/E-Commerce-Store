@@ -5,37 +5,46 @@ on:
     paths:
       - "client/**"
       - "server/api-gateway/**"
-      - "server/microservices/account/**"
-      - "server/microservices/cart/**"
-      - "server/microservices/inventory/**"
-      - "server/microservices/order-status/**"
-      - "server/microservices/payment/**"
-      - "server/microservices/place-order/**"
-      - "server/microservices/product-review/**"
-      - "server/microservices/recommendation/**"
-      - "server/microservices/recommendation-generation/**"
-      - "server/microservices/search/**"
-      - "server/microservices/shipping/**"
+      - "server/microservices/**/**"
   pull_request:
     paths:
       - "client/**"
       - "server/api-gateway/**"
-      - "server/microservices/account/**"
-      - "server/microservices/cart/**"
-      - "server/microservices/inventory/**"
-      - "server/microservices/order-status/**"
-      - "server/microservices/payment/**"
-      - "server/microservices/place-order/**"
-      - "server/microservices/product-review/**"
-      - "server/microservices/recommendation/**"
-      - "server/microservices/recommendation-generation/**"
-      - "server/microservices/search/**"
-      - "server/microservices/shipping/**"
+      - "server/microservices/**/**"
 
 jobs:
-  test-client:
+  test:
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.head_commit.modified, 'client/') || contains(github.event.pull_request.modified_files, 'client/') }}
+    strategy:
+      matrix:
+        include:
+          - service: client
+            path: client/**
+          - service: api-gateway
+            path: server/api-gateway/**
+          - service: account
+            path: server/microservices/account/**
+          - service: cart
+            path: server/microservices/cart/**
+          - service: inventory
+            path: server/microservices/inventory/**
+          - service: order-status
+            path: server/microservices/order-status/**
+          - service: payment
+            path: server/microservices/payment/**
+          - service: place-order
+            path: server/microservices/place-order/**
+          - service: product-review
+            path: server/microservices/product-review/**
+          - service: recommendation
+            path: server/microservices/recommendation/**
+          - service: recommendation-generation
+            path: server/microservices/recommendation-generation/**
+          - service: search
+            path: server/microservices/search/**
+          - service: shipping
+            path: server/microservices/shipping/**
+    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, matrix.path) || github.event_name == 'pull_request' && contains(github.event.pull_request.modified_files, matrix.path) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -50,23 +59,6 @@ jobs:
 
       - name: Run tests
         run: npm test
-
-  test-api-gateway:
-    runs-on: ubuntu-latest
-    if: ${{ contains(github.event.head_commit.modified, 'server/api-gateway/') || contains(github.event.pull_request.modified_files, 'server/api-gateway/') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
         env:
           SECRET_KEY: ${{ secrets.SECRET_KEY }}
           ACCOUNT_SERVICE_BASE_URL: ${{ secrets.ACCOUNT_SERVICE_BASE_URL }}
@@ -81,246 +73,3 @@ jobs:
           RECOMMENDATION_SERVICE_BASE_URL: ${{ secrets.RECOMMENDATION_SERVICE_BASE_URL }}
           SEARCH_SERVICE_BASE_URL: ${{ secrets.SEARCH_SERVICE_BASE_URL }}
           SHIPPING_SERVICE_BASE_URL: ${{ secrets.SHIPPING_SERVICE_BASE_URL }}
-        run: npm test
-
-  test-microservice-account:
-    runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/account') || contains(github.event.pull_request.modified_files, 'server/microservices/account') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
-        run: npm test
-
-  test-microservice-cart:
-    runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/cart') || contains(github.event.pull_request.modified_files, 'server/microservices/cart') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
-        run: npm test
-
-  test-microservice-inventory:
-    runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/inventory') || contains(github.event.pull_request.modified_files, 'server/microservices/inventory') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
-        run: npm test
-
-  test-microservice-order-status:
-    runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/order-status') || contains(github.event.pull_request.modified_files, 'server/microservices/order-status') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
-        run: npm test
-
-  test-microservice-payment:
-    runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/payment') || contains(github.event.pull_request.modified_files, 'server/microservices/payment') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
-        run: npm test
-
-  test-microservice-place-order:
-    runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/place-order') || contains(github.event.pull_request.modified_files, 'server/microservices/place-order') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
-        run: npm test
-
-  test-microservice-product-review:
-    runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/product-review') || contains(github.event.pull_request.modified_files, 'server/microservices/product-review') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
-        run: npm test
-
-  test-microservice-recommendation:
-    runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/recommendation') || contains(github.event.pull_request.modified_files, 'server/microservices/recommendation') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
-        run: npm test
-
-  test-microservice-recommendation-generation:
-    runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/recommendation-generation') || contains(github.event.pull_request.modified_files, 'server/microservices/recommendation-generation') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
-        run: npm test
-
-  test-microservice-search:
-    runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/search') || contains(github.event.pull_request.modified_files, 'server/microservices/search') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
-        run: npm test
-
-  test-microservice-shipping:
-    runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/shipping') || contains(github.event.pull_request.modified_files, 'server/microservices/shipping') }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
-        run: npm test
