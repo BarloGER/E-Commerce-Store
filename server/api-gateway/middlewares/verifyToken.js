@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ErrorResponse } from "../utils/ErrorResponse.js";
+import { currentConfig } from "../configs/envConfig.js";
 
 export const verifyToken = asyncHandler(async (req, res, next) => {
   const {
@@ -15,7 +16,7 @@ export const verifyToken = asyncHandler(async (req, res, next) => {
     });
   }
   try {
-    const { id } = jwt.verify(authorization, process.env.SECRET_KEY);
+    const { id } = jwt.verify(authorization, currentConfig.SECRET_KEY);
     req.userId = id;
     next();
   } catch (err) {
