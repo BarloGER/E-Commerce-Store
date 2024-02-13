@@ -22,7 +22,7 @@ module.exports = {
     sourceType: "module",
   },
   rules: {
-    "prettier/prettier": ["error", { endOfLine: "ls" }],
+    "prettier/prettier": ["error", { endOfLine: "lf" }],
     "no-unused-vars": ["error", { argsIgnorePattern: "^next$" }],
     "linebreak-style": ["error", "unix"],
     quotes: ["error", "double"],
