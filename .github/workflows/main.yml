@@ -35,7 +35,6 @@ on:
 jobs:
   test-client:
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.head_commit.modified, 'client/') || contains(github.event.pull_request.modified_files, 'client/') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -53,7 +52,6 @@ jobs:
 
   test-api-gateway:
     runs-on: ubuntu-latest
-    if: ${{ contains(github.event.head_commit.modified, 'server/api-gateway/') || contains(github.event.pull_request.modified_files, 'server/api-gateway/') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -85,8 +83,6 @@ jobs:
 
   test-microservice-account:
     runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/account') || contains(github.event.pull_request.modified_files, 'server/microservices/account') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -107,8 +103,6 @@ jobs:
 
   test-microservice-cart:
     runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/cart') || contains(github.event.pull_request.modified_files, 'server/microservices/cart') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -129,8 +123,6 @@ jobs:
 
   test-microservice-inventory:
     runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/inventory') || contains(github.event.pull_request.modified_files, 'server/microservices/inventory') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -151,8 +143,6 @@ jobs:
 
   test-microservice-order-status:
     runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/order-status') || contains(github.event.pull_request.modified_files, 'server/microservices/order-status') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -173,8 +163,6 @@ jobs:
 
   test-microservice-payment:
     runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/payment') || contains(github.event.pull_request.modified_files, 'server/microservices/payment') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -195,8 +183,6 @@ jobs:
 
   test-microservice-place-order:
     runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/place-order') || contains(github.event.pull_request.modified_files, 'server/microservices/place-order') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -217,8 +203,6 @@ jobs:
 
   test-microservice-product-review:
     runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/product-review') || contains(github.event.pull_request.modified_files, 'server/microservices/product-review') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -239,8 +223,6 @@ jobs:
 
   test-microservice-recommendation:
     runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/recommendation') || contains(github.event.pull_request.modified_files, 'server/microservices/recommendation') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -261,8 +243,6 @@ jobs:
 
   test-microservice-recommendation-generation:
     runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/recommendation-generation') || contains(github.event.pull_request.modified_files, 'server/microservices/recommendation-generation') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -283,8 +263,6 @@ jobs:
 
   test-microservice-search:
     runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/search') || contains(github.event.pull_request.modified_files, 'server/microservices/search') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -305,8 +283,6 @@ jobs:
 
   test-microservice-shipping:
     runs-on: ubuntu-latest
-
-    if: ${{ contains(github.event.head_commit.modified, 'server/microservices/shipping') || contains(github.event.pull_request.modified_files, 'server/microservices/shipping') }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
