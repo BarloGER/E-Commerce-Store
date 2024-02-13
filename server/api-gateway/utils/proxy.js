@@ -1,26 +1,69 @@
 import axios from "axios";
+import logger from "../configs/logger.js";
+import { asyncHandler } from "./asyncHandler.js";
+import { ErrorResponse } from "./ErrorResponse.js";
 
 export const proxy = (target) => {
-  return async (req, res) => {
-    const { host, "cache-control": _, ...restOfHeaders } = req.headers;
+  const instance = axios.create({
+    baseURL: target,
+    timeout: 5000,
+  });
 
-    const axiosConfig = {
-      method: req.method,
-      url: `${target}${req.url}`,
-      data: req.body,
-      headers: { ...restOfHeaders, "Cache-Control": "no-cache" },
-    };
+  instance.interceptors.request.use((config) => {
+    delete config.headers["Authorization"];
+    logger.info(`Proxying request to: ${config.baseURL}${config.url}`);
+    return config;
+  });
 
+  instance.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      return Promise.reject(error);
+    },
+  );
+
+  return asyncHandler(async (req, res, next) => {
     try {
-      const response = await axios(axiosConfig);
-      res.send(response.data);
+      const response = await instance({
+        method: req.method,
+        url: req.url,
+        headers: req.headers,
+        data: req.body,
+        params: req.query,
+      });
+
+      res.status(response.status).json(response.data);
     } catch (error) {
-      console.error(error);
-      if (error.response) {
-        res.status(error.response.status).send(error.response.data);
+      if (error.code === "ECONNABORTED" || error.message.includes("timeout")) {
+        next(
+          new ErrorResponse({
+            message: "Gateway Timeout",
+            statusCode: 504,
+            errorType: "NetworkError",
+            errorCode: "NET_001",
+          }),
+        );
+      } else if (error.response) {
+        next(
+          new ErrorResponse({
+            message: error.response.data.message || "An error occurred",
+            statusCode: error.response.status,
+            errorType: "APIError",
+            errorCode: "API_001",
+          }),
+        );
       } else {
-        res.status(500).send("Server Error");
+        next(
+          new ErrorResponse({
+            message: "Server Error",
+            statusCode: 500,
+            errorType: "InternalError",
+            errorCode: "INT_001",
+          }),
+        );
       }
     }
-  };
+  });
 };
