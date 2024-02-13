@@ -58,3 +58,5 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   console.log(`API Gateway läuft auf Port ${PORT}`);
 });
+
+// test
