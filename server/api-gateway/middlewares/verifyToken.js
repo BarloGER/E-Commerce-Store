@@ -10,7 +10,7 @@ export const verifyToken = asyncHandler(async (req, res, next) => {
     throw new ErrorResponse({
       message: "Bitte zuerst einloggen.",
       statusCode: 401,
-      errorType: "Unauthorized",
+      errorType: "AuthenticationError",
       errorCode: "AUTH_005",
     });
   }
@@ -22,7 +22,7 @@ export const verifyToken = asyncHandler(async (req, res, next) => {
     throw new ErrorResponse({
       message: "Ungültiger Token",
       statusCode: 401,
-      errorType: "Unauthorized",
+      errorType: "AuthenticationError",
       errorCode: "AUTH_006",
     });
   }

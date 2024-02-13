@@ -6,9 +6,9 @@ export const validateJoi = (schema) => (req, res, next) => {
       new ErrorResponse({
         message: "Keine Daten zum Validieren vorhanden.",
         statusCode: 400,
-        errorType: "Validation Error",
-        errorCode: "Joi_001",
-      })
+        errorType: "ValidationError",
+        errorCode: "VAL_001",
+      }),
     );
   }
 
@@ -18,9 +18,9 @@ export const validateJoi = (schema) => (req, res, next) => {
         new ErrorResponse({
           message: error.details[0].message,
           statusCode: 400,
-          errorType: "Validation Error",
-          errorCode: "Joi_002",
-        })
+          errorType: "ValidationError",
+          errorCode: "VAL_002",
+        }),
       )
     : next();
 };
