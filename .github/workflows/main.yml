@@ -1,75 +1,46 @@
-name: Main CI
+name: Node.js CI
 
 on:
   push:
-    paths:
-      - "client/**"
-      - "server/api-gateway/**"
-      - "server/microservices/**/**"
+    branches: [ main ]
   pull_request:
-    paths:
-      - "client/**"
-      - "server/api-gateway/**"
-      - "server/microservices/**/**"
+    branches: [ main ]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        include:
-          - service: client
-            path: client/**
-          - service: api-gateway
-            path: server/api-gateway/**
-          - service: account
-            path: server/microservices/account/**
-          - service: cart
-            path: server/microservices/cart/**
-          - service: inventory
-            path: server/microservices/inventory/**
-          - service: order-status
-            path: server/microservices/order-status/**
-          - service: payment
-            path: server/microservices/payment/**
-          - service: place-order
-            path: server/microservices/place-order/**
-          - service: product-review
-            path: server/microservices/product-review/**
-          - service: recommendation
-            path: server/microservices/recommendation/**
-          - service: recommendation-generation
-            path: server/microservices/recommendation-generation/**
-          - service: search
-            path: server/microservices/search/**
-          - service: shipping
-            path: server/microservices/shipping/**
-    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, matrix.path) || github.event_name == 'pull_request' && contains(github.event.pull_request.modified_files, matrix.path) }}
+        node-version: [20.x]
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20.x"
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "20.x"
 
-      - name: Install dependencies
-        run: npm ci
+    - name: Install dependencies
+      run: npm ci
+      working-directory: ./server/api-gateway
 
-      - name: Run tests
-        run: npm test
-        env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          ACCOUNT_SERVICE_BASE_URL: ${{ secrets.ACCOUNT_SERVICE_BASE_URL }}
-          CART_SERVICE_BASE_URL: ${{ secrets.CART_SERVICE_BASE_URL }}
-          INVENTORY_SERVICE_BASE_URL: ${{ secrets.INVENTORY_SERVICE_BASE_URL }}
-          ORDER_STATUS_SERVICE_BASE_URL: ${{ secrets.ORDER_STATUS_SERVICE_BASE_URL }}
-          PAYMENT_SERVICE_BASE_URL: ${{ secrets.PAYMENT_SERVICE_BASE_URL }}
-          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
-          PLACE_ORDER_SERVICE_BASE_URL: ${{ secrets.PLACE_ORDER_SERVICE_BASE_URL }}
-          PRODUCT_REVIEW_SERVICE_BASE_URL: ${{ secrets.PRODUCT_REVIEW_SERVICE_BASE_URL }}
-          RECOMMENDATION_GENERATION_SERVICE_BASE_URL: ${{ secrets.RECOMMENDATION_GENERATION_SERVICE_BASE_URL }}
-          RECOMMENDATION_SERVICE_BASE_URL: ${{ secrets.RECOMMENDATION_SERVICE_BASE_URL }}
-          SEARCH_SERVICE_BASE_URL: ${{ secrets.SEARCH_SERVICE_BASE_URL }}
-          SHIPPING_SERVICE_BASE_URL: ${{ secrets.SHIPPING_SERVICE_BASE_URL }}
+    - name: Run tests
+      run: npm test
+      working-directory: ./server/api-gateway
+      env:
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        ACCOUNT_SERVICE_BASE_URL: ${{ secrets.ACCOUNT_SERVICE_BASE_URL }}
+        CART_SERVICE_BASE_URL: ${{ secrets.CART_SERVICE_BASE_URL }}
+        INVENTORY_SERVICE_BASE_URL: ${{ secrets.INVENTORY_SERVICE_BASE_URL }}
+        ORDER_STATUS_SERVICE_BASE_URL: ${{ secrets.ORDER_STATUS_SERVICE_BASE_URL }}
+        PAYMENT_SERVICE_BASE_URL: ${{ secrets.PAYMENT_SERVICE_BASE_URL }}
+        PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
+        PLACE_ORDER_SERVICE_BASE_URL: ${{ secrets.PLACE_ORDER_SERVICE_BASE_URL }}
+        PRODUCT_REVIEW_SERVICE_BASE_URL: ${{ secrets.PRODUCT_REVIEW_SERVICE_BASE_URL }}
+        RECOMMENDATION_GENERATION_SERVICE_BASE_URL: ${{ secrets.RECOMMENDATION_GENERATION_SERVICE_BASE_URL }}
+        RECOMMENDATION_SERVICE_BASE_URL: ${{ secrets.RECOMMENDATION_SERVICE_BASE_URL }}
+        SEARCH_SERVICE_BASE_URL: ${{ secrets.SEARCH_SERVICE_BASE_URL }}
+        SHIPPING_SERVICE_BASE_URL: ${{ secrets.SHIPPING_SERVICE_BASE_URL }}
