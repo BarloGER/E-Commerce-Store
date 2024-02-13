@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ErrorResponse } from "../utils/ErrorResponse.js";
 import { userDBPool } from "../db/index.js";
+import { currentConfig } from "../configs/envConfig.js";
 
 export const signUp = asyncHandler(async (req, res, next) => {
   const { email, password, username, first_name, last_name } = req.body;
@@ -48,7 +49,7 @@ export const signUp = asyncHandler(async (req, res, next) => {
 
   const token = jwt.sign(
     { id: newUser.rows[0].user_id },
-    process.env.SECRET_KEY,
+    currentConfig.SECRET_KEY,
     { expiresIn: "1d" },
   );
   res.status(201).json({ token, message: "Erfolgreich registriert." });
@@ -83,7 +84,7 @@ export const signIn = asyncHandler(async (req, res, next) => {
     "UPDATE users SET last_login = NOW() WHERE user_id = $1";
   await userDBPool.query(loginUpdateQuery, [user.user_id]);
 
-  const token = jwt.sign({ id: user.user_id }, process.env.SECRET_KEY, {
+  const token = jwt.sign({ id: user.user_id }, currentConfig.SECRET_KEY, {
     expiresIn: "1d",
   });
   res.status(200).json({ token, message: "Erfolgreich angemeldet." });
