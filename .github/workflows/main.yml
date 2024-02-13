@@ -1,50 +1,19 @@
-name: Main CI
+name: Run Tests
 
 on:
   push:
-    paths:
-      - "client/**"
-      - "server/api-gateway/**"
-      - "server/microservices/**/**"
+    branches:
+      - main
   pull_request:
-    paths:
-      - "client/**"
-      - "server/api-gateway/**"
-      - "server/microservices/**/**"
+    branches:
+      - main
 
 jobs:
-  test:
+  api-gateway-tests:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - service: client
-            path: client/**
-          - service: api-gateway
-            path: server/api-gateway/**
-          - service: account
-            path: server/microservices/account/**
-          - service: cart
-            path: server/microservices/cart/**
-          - service: inventory
-            path: server/microservices/inventory/**
-          - service: order-status
-            path: server/microservices/order-status/**
-          - service: payment
-            path: server/microservices/payment/**
-          - service: place-order
-            path: server/microservices/place-order/**
-          - service: product-review
-            path: server/microservices/product-review/**
-          - service: recommendation
-            path: server/microservices/recommendation/**
-          - service: recommendation-generation
-            path: server/microservices/recommendation-generation/**
-          - service: search
-            path: server/microservices/search/**
-          - service: shipping
-            path: server/microservices/shipping/**
-    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, matrix.path) || github.event_name == 'pull_request' && contains(github.event.pull_request.modified_files, matrix.path) }}
+    defaults:
+      run:
+        working-directory: ./server/api-gateway
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -73,3 +42,35 @@ jobs:
           RECOMMENDATION_SERVICE_BASE_URL: ${{ secrets.RECOMMENDATION_SERVICE_BASE_URL }}
           SEARCH_SERVICE_BASE_URL: ${{ secrets.SEARCH_SERVICE_BASE_URL }}
           SHIPPING_SERVICE_BASE_URL: ${{ secrets.SHIPPING_SERVICE_BASE_URL }}
+
+  account-service-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server/microservices/account
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+      - run: npm ci
+      - run: npm test
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
+
+  cart-service-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server/microservices/cart
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+      - run: npm ci
+      - run: npm test
+        env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          PG_BASE_CONNECTIONSTRING: ${{ secrets.PG_BASE_CONNECTIONSTRING }}
