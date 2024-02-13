@@ -20,6 +20,7 @@ export const validateEnvs = () => {
       throw new Error(`Environment variable ${key} is not defined.`);
     }
   });
+  console.log("ENV validation successful");
 };
 
 export const currentConfig = {

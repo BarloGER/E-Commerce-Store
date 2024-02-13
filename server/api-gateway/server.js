@@ -5,8 +5,10 @@ import { proxy } from "./utils/proxy.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { verifyToken } from "./middlewares/verifyToken.js";
 import { authRouter } from "./routes/authRouter.js";
+import { testDBConnection } from "./db/index.js";
 
 validateEnvs();
+testDBConnection();
 
 export const app = express();
 const PORT = 8080;
