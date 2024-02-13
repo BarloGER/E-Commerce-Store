@@ -44,7 +44,6 @@ jobs:
             path: server/microservices/search/**
           - service: shipping
             path: server/microservices/shipping/**
-    if: ${{ github.event_name == 'push' && contains(github.event.head_commit.modified, matrix.path) || github.event_name == 'pull_request' && contains(github.event.pull_request.modified_files, matrix.path) }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
