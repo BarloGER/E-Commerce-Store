@@ -1,5 +1,5 @@
-import { asyncHandler } from "../../utils/asyncHandler.js";
-import { ErrorResponse } from "../../utils/ErrorResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ErrorResponse } from "../utils/ErrorResponse.js";
 import { userDBPool } from "../db/index.js";
 
 // export const getAddress = asyncHandler(async (req, res, next) => {

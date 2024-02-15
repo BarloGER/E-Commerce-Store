@@ -1,4 +1,4 @@
-import { ErrorResponse } from "../../utils/ErrorResponse.js";
+import { ErrorResponse } from "../utils/ErrorResponse.js";
 
 export const validateJoi = (schema) => (req, res, next) => {
   if (Object.keys(req.body).length === 0) {
