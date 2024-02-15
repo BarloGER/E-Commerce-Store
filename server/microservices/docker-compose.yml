@@ -1,0 +1,100 @@
+version: "3.8"
+services:
+  account:
+    build:
+      context: ./account
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - NODE_ENV=production
+
+  cart:
+    build:
+      context: ./cart
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - NODE_ENV=production
+
+  inventory:
+    build:
+      context: ./inventory
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      - NODE_ENV=production
+
+  order-status:
+    build:
+      context: ./order-status
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      - NODE_ENV=production
+
+  payment:
+    build:
+      context: ./payment
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8085"
+    environment:
+      - NODE_ENV=production
+
+  place-order:
+    build:
+      context: ./place-order
+      dockerfile: Dockerfile
+    ports:
+      - "8086:8086"
+    environment:
+      - NODE_ENV=production
+
+  product-review:
+    build:
+      context: ./product-review
+      dockerfile: Dockerfile
+    ports:
+      - "8087:8087"
+    environment:
+      - NODE_ENV=production
+
+  recommendation:
+    build:
+      context: ./recommendation
+      dockerfile: Dockerfile
+    ports:
+      - "8088:8088"
+    environment:
+      - NODE_ENV=production
+
+  recommendation-generation:
+    build:
+      context: ./recommendation-generation
+      dockerfile: Dockerfile
+    ports:
+      - "8089:8089"
+    environment:
+      - NODE_ENV=production
+
+  search:
+    build:
+      context: ./search
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8090"
+    environment:
+      - NODE_ENV=production
+
+  shipping:
+    build:
+      context: ./shipping
+      dockerfile: Dockerfile
+    ports:
+      - "8091:8091"
+    environment:
+      - NODE_ENV=production
