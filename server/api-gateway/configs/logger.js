@@ -1,11 +1,18 @@
 import winston from "winston";
 
+const logFormat = winston.format.printf(
+  ({ level, message, timestamp, stack }) => {
+    return `${timestamp} ${level}: ${stack || message}`;
+  },
+);
+
 const logger = winston.createLogger({
-  // Set the minimum log level that should be logged
   level: "info",
   format: winston.format.combine(
-    winston.format.timestamp(),
+    winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+    winston.format.errors({ stack: true }),
     winston.format.json(),
+    logFormat,
   ),
   transports: [
     new winston.transports.File({ filename: "logs/error.log", level: "error" }),
@@ -16,7 +23,10 @@ const logger = winston.createLogger({
 if (process.env.NODE_ENV !== "production") {
   logger.add(
     new winston.transports.Console({
-      format: winston.format.simple(), // Use simple format for the console
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple(),
+      ),
     }),
   );
 }

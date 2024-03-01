@@ -11,15 +11,28 @@ export const proxy = (target) => {
 
   instance.interceptors.request.use((config) => {
     delete config.headers["Authorization"];
-    logger.info(`Proxying request to: ${config.baseURL}${config.url}`);
+    logger.info(`Proxying request to: ${config.baseURL}${config.url}`, {
+      requestConfig: config,
+    });
     return config;
   });
 
   instance.interceptors.response.use(
     (response) => {
+      logger.info(
+        `Response from: ${response.config.url} with status: ${response.status}`,
+      );
       return response;
     },
     (error) => {
+      if (error.response) {
+        logger.error(
+          `Error response from: ${error.response.config.url} with status: ${error.response.status}`,
+          { error: error.message },
+        );
+      } else {
+        logger.error("Error in request:", { error: error.message });
+      }
       return Promise.reject(error);
     },
   );
